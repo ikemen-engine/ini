@@ -485,7 +485,7 @@ func reflectSliceWithProperType(key *Key, field reflect.Value, delim string, all
 			}
 
 			if i == 0 {
-				keyWithShadows = newKey(key.s, key.name, val)
+				keyWithShadows = newKey(key.s, key.name, val, key.Comment)
 			} else {
 				_ = keyWithShadows.AddShadow(val)
 			}

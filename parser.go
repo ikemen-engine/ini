@@ -507,13 +507,13 @@ func (f *File) parse(reader io.Reader) (err error) {
 		}
 		isLastValueEmpty = len(value) == 0
 
-		key, err := section.NewKey(kname, value)
+		comment := strings.TrimSpace(p.comment.String())
+		p.comment.Reset()
+		key, err := section.NewKey2(kname, value, comment, isAutoIncr)
 		if err != nil {
 			return err
 		}
 		key.isAutoIncrement = isAutoIncr
-		key.Comment = strings.TrimSpace(p.comment.String())
-		p.comment.Reset()
 		lastRegularKey = key
 	}
 	return nil

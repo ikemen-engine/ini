@@ -39,15 +39,16 @@ type Key struct {
 }
 
 // newKey simply return a key object with given values.
-func newKey(s *Section, name, val string) *Key {
+func newKey(s *Section, name, val, comment string) *Key {
 	return &Key{
-		s:     s,
-		name:  name,
-		value: val,
+		s:       s,
+		name:    name,
+		value:   val,
+		Comment: comment,
 	}
 }
 
-func (k *Key) addShadow(val string) error {
+func (k *Key) addShadow(val, comment string) error {
 	if k.isShadow {
 		return errors.New("cannot add shadow to another shadow key")
 	} else if k.isAutoIncrement || k.isBooleanType {
@@ -66,7 +67,7 @@ func (k *Key) addShadow(val string) error {
 		}
 	}
 
-	shadow := newKey(k.s, k.name, val)
+	shadow := newKey(k.s, k.name, val, comment)
 	shadow.isShadow = true
 	k.shadows = append(k.shadows, shadow)
 	return nil
@@ -77,7 +78,7 @@ func (k *Key) AddShadow(val string) error {
 	if !k.s.f.options.AllowShadows {
 		return errors.New("shadow key is not allowed")
 	}
-	return k.addShadow(val)
+	return k.addShadow(val, k.Comment)
 }
 
 func (k *Key) addNestedValue(val string) error {
